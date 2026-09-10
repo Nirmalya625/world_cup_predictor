@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>World Cup 2026 Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="pitch-texture" aria-hidden="true"></div>
+
+  <div class="container">
+
+    <header class="hero reveal is-hero">
+      <svg class="hero-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path pathLength="100" class="trophy-path" style="--d:1" d="M28 18 H72" />
+        <path pathLength="100" class="trophy-path" style="--d:2" d="M28 18 C28 42 38 54 50 54 C62 54 72 42 72 18" />
+        <path pathLength="100" class="trophy-path" style="--d:3" d="M28 22 C14 22 14 40 30 44" />
+        <path pathLength="100" class="trophy-path" style="--d:3" d="M72 22 C86 22 86 40 70 44" />
+        <path pathLength="100" class="trophy-path" style="--d:4" d="M50 54 V70" />
+        <path pathLength="100" class="trophy-path" style="--d:5" d="M42 70 H58" />
+        <path pathLength="100" class="trophy-path" style="--d:5" d="M36 82 H64" />
+        <path pathLength="100" class="trophy-path" style="--d:6" d="M50 70 V82" />
+      </svg>
+
+      <span class="live-tag"><span class="live-dot"></span>Live model &mdash; updated on every match played</span>
+      <h1 class="hero-title">World Cup<br>2026<span class="hero-title-accent">Knockout Predictor</span></h1>
+      <p class="subtitle">Elo ratings updated on every match played so far &mdash; <strong>{{ n_sims }}</strong> simulated tournaments run from here.</p>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title"><span class="section-eyebrow">Next up</span>Quarterfinals</h2>
+
+      <div class="matchups" data-stagger>
+        {% for m in quarterfinals %}
+        <article class="matchup-card reveal">
+          <div class="fixture-row">
+            <span class="team-name">{{ m.team_a }}</span>
+            <span class="team-prob" data-count="{{ m.prob_a }}">0.0%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill bar-fill--a" data-bar="{{ m.prob_a }}" style="width:0%"></div>
+          </div>
+
+          <div class="vs-divider"><span>vs</span></div>
+
+          <div class="fixture-row">
+            <span class="team-name">{{ m.team_b }}</span>
+            <span class="team-prob" data-count="{{ m.prob_b }}">0.0%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill bar-fill--b" data-bar="{{ m.prob_b }}" style="width:0%"></div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="section-eyebrow">The long view</span>Title odds</h2>
+
+      <div class="odds-board" data-stagger>
+        <div class="odds-header">
+          <span class="col-rank"></span>
+          <span class="col-team">Team</span>
+          <span class="col-elo">Elo</span>
+          <span class="col-stat">Reach semis</span>
+          <span class="col-stat">Reach final</span>
+          <span class="col-title">Win title</span>
+        </div>
+
+        {% for r in results %}
+        <div class="odds-row reveal">
+          <span class="col-rank">{{ loop.index }}</span>
+          <span class="col-team">{{ r.team }}</span>
+          <span class="col-elo">{{ r.elo }}</span>
+          <span class="col-stat">{{ r.reach_semis_pct }}%</span>
+          <span class="col-stat">{{ r.reach_final_pct }}%</span>
+          <span class="col-title">
+            <span class="title-bar-track">
+              <span class="title-bar-fill" data-bar="{{ r.win_title_pct }}" style="width:0%"></span>
+            </span>
+            <span class="title-pct" data-count="{{ r.win_title_pct }}">0.0%</span>
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <footer class="footer">
+      Elo + logistic win-probability model, {{ n_sims }} Monte Carlo trials over the remaining bracket. A statistical model, not a guarantee &mdash; footballs are round for a reason.
+    </footer>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

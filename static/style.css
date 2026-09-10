@@ -1,0 +1,365 @@
+/* ---------------------------------------------------------------------
+   World Cup 2026 Predictor — design tokens
+   Palette: espresso-ink background, warm ivory type, brass/trophy-gold
+   accent, a muted brick-red for the "away" side of a fixture.
+   Type: Fraunces (display/editorial) + Inter (body/data, tabular nums).
+--------------------------------------------------------------------- */
+:root{
+  --ink: #15120f;
+  --ink-2: #1c1712;
+  --ink-3: #241d16;
+  --paper: #f2ead9;
+  --muted: #a89a84;
+  --muted-2: #6f6455;
+  --gold: #c9a227;
+  --gold-bright: #e8c04d;
+  --brick: #9a4a44;
+  --line: #332c22;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection{ background: var(--gold); color: var(--ink); }
+
+:focus-visible{
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Subtle tactics-board texture: faint diagonal hairlines, fixed behind content */
+.pitch-texture{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(242,234,217,0.025) 0px, rgba(242,234,217,0.025) 1px, transparent 1px, transparent 90px),
+    radial-gradient(1100px 600px at 50% -12%, #241d16 0%, var(--ink) 60%);
+}
+
+.container{
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 64px 22px 80px;
+}
+
+/* ---------------------------------- Hero ---------------------------------- */
+
+.hero{
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 40px;
+  margin-bottom: 44px;
+}
+
+.hero-icon{
+  width: 46px;
+  height: 46px;
+  color: var(--gold);
+  margin-bottom: 18px;
+  display: block;
+}
+
+.trophy-path{
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+.is-hero.is-visible .trophy-path{
+  animation: draw-trophy 900ms ease-out forwards;
+  animation-delay: calc(var(--d) * 90ms);
+}
+@keyframes draw-trophy{
+  to{ stroke-dashoffset: 0; }
+}
+
+.live-tag{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  background: rgba(201,162,39,0.1);
+  border: 1px solid rgba(201,162,39,0.35);
+  padding: 5px 12px 5px 10px;
+  border-radius: 100px;
+  margin-bottom: 22px;
+}
+.live-dot{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold-bright);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(232,192,77,0.5); }
+  50% { opacity: 0.5; box-shadow: 0 0 0 4px rgba(232,192,77,0); }
+}
+
+.hero-title{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(40px, 8vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin: 0 0 18px;
+}
+.hero-title-accent{
+  display: block;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 0.42em;
+  color: var(--gold);
+  margin-top: 10px;
+  letter-spacing: 0;
+}
+
+.subtitle{
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 46em;
+  margin: 0;
+}
+.subtitle strong{ color: var(--paper); font-weight: 700; }
+
+/* --------------------------------- Sections -------------------------------- */
+
+.section{ margin-bottom: 56px; }
+
+.section-title{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  margin: 0 0 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.section-eyebrow{
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+/* ------------------------------- Fixture cards ------------------------------ */
+
+.matchups{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.matchup-card{
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 22px 22px 20px;
+  transition: transform 240ms ease, border-color 240ms ease, background 240ms ease;
+}
+.matchup-card:hover{
+  transform: translateY(-3px);
+  border-color: rgba(201,162,39,0.4);
+  background: var(--ink-3);
+}
+
+.fixture-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.team-name{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+}
+.team-prob{
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gold-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar-track{
+  height: 5px;
+  background: rgba(242,234,217,0.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.bar-fill{
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bar-fill--a{ background: linear-gradient(90deg, var(--gold), var(--gold-bright)); }
+.bar-fill--b{ background: linear-gradient(90deg, var(--brick), #b96058); }
+
+.vs-divider{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+  color: var(--muted-2);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.vs-divider::before, .vs-divider::after{
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* --------------------------------- Odds board -------------------------------- */
+
+.odds-board{
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.odds-header, .odds-row{
+  display: grid;
+  grid-template-columns: 28px 1.4fr 70px 90px 90px 1.6fr;
+  gap: 14px;
+  align-items: center;
+  padding: 13px 20px;
+}
+.odds-header{
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  border-bottom: 1px solid var(--line);
+}
+.odds-row{
+  border-bottom: 1px solid var(--line);
+  transition: background 200ms ease;
+}
+.odds-row:last-child{ border-bottom: none; }
+.odds-row:hover{ background: rgba(242,234,217,0.03); }
+
+.col-rank{
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--muted-2);
+}
+.col-team{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+}
+.col-elo{
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.col-stat{
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.col-title{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.title-bar-track{
+  flex: 1;
+  height: 6px;
+  background: rgba(242,234,217,0.08);
+  border-radius: 100px;
+  overflow: hidden;
+  display: block;
+}
+.title-bar-fill{
+  display: block;
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+  transition: width 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.title-pct{
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--gold-bright);
+  min-width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------- Footer ----------------------------------- */
+
+.footer{
+  color: var(--muted-2);
+  font-size: 12px;
+  line-height: 1.6;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+
+/* ------------------------------- Reveal system -------------------------------- */
+
+.reveal{
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 640ms cubic-bezier(0.16, 1, 0.3, 1), transform 640ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity: 1; transform: none; transition: none; }
+  .trophy-path{ stroke-dashoffset: 0; animation: none; }
+  .bar-fill, .title-bar-fill{ transition: none; }
+  .live-dot{ animation: none; }
+}
+
+/* ---------------------------------- Responsive --------------------------------- */
+
+@media (max-width: 720px){
+  .container{ padding: 44px 16px 60px; }
+  .matchups{ grid-template-columns: 1fr; }
+
+  .odds-header{ display: none; }
+  .odds-row{
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 16px 18px;
+  }
+  .col-rank{ display: none; }
+  .col-team{ font-size: 17px; }
+  .col-elo, .col-stat{
+    display: inline-block;
+    margin-right: 14px;
+  }
+  .col-elo::before{ content: 'Elo '; color: var(--muted-2); }
+  .col-title{ margin-top: 8px; }
+}
